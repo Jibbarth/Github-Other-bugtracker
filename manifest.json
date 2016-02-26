@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": [ "https://github.com/*"],
-      "js": [ "jquery.min.js", "script.js" ],
+      "js": [ "jquery.min.js", "script.js" ]
     }
   ],
   "manifest_version": 2
