@@ -3,11 +3,12 @@
  */
 var _BUGTRACKER_ISSUE_URL_;
 
-chrome.runtime.sendMessage({method: "getBugtrackerUrl"}, function(response) {
-  _BUGTRACKER_ISSUE_URL_ = response.url;
-  init();
+$(function(){
+    chrome.runtime.sendMessage({method: "getBugtrackerUrl"}, function(response) {
+      _BUGTRACKER_ISSUE_URL_ = response.url;
+      init();
+    });
 });
-
 
 /**
  * Browse all commit-title
@@ -39,14 +40,14 @@ function init(){
             }
         });
         $('#release_body').on('blur', function(e) {
-            console.log(e);
             var text = $(this).val();
             var aContent = text.split(/(^|[^\[])(#[0-9\d-]+)/);
+            console.log(aContent);
             if(aContent.length > 1) {
                 $(this).val('');
                 var newVal = "";
                 for(var i = 0; i<aContent.length; i++) {
-                    if(aContent[i].indexOf('#') == 0) {
+                    if(aContent[i].indexOf('#') == 0 && aContent[i].indexOf(' ') < 0) {
                         var ticketNumber = aContent[i].substr(1);
                         var newText = '[' + aContent[i] + ']('+_BUGTRACKER_ISSUE_URL_+ticketNumber+')';
                         newVal += newText;
