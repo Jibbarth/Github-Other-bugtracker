@@ -3,11 +3,25 @@
  */
 var _BUGTRACKER_ISSUE_URL_;
 
-$(function(){
+(function(){
     chrome.runtime.sendMessage({method: "getBugtrackerUrl"}, function(response) {
       _BUGTRACKER_ISSUE_URL_ = response.url;
-      init();
     });
+    init();
+})();
+function addListener(obj, eventName, listener) {
+    if(obj.addEventListener) {
+        obj.addEventListener(eventName, listener, false);
+    } else {
+        obj.attachEvent("on" + eventName, listener);
+    }
+}
+
+addListener(document, 'DOMContentLoaded', function(event) {
+    init();
+});
+document.addEventListener('pjax:end', function(){
+    init();
 });
 
 /**
@@ -83,5 +97,7 @@ function init(){
                 $(this).val(newVal);
             }
         });
+    } else {
+        setTimeout(init, 1000);
     }
 }
