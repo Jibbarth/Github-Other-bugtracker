@@ -39,6 +39,31 @@ function init(){
                 }
             }
         });
+        if($('#release_body').length > 0) {
+            //get release number
+            if($('#release_body').val().length == 0) {
+                var sReleaseNumber = $('#release_tag_name').val();
+                var allVersion = $('#git-tags').find('option');
+                var sPreviousNumber = "#TO_REPLACE#";
+                for (var i = 0; i < allVersion.length; i++) {
+                    if($(allVersion[i]).html() == sReleaseNumber && (i+1) < allVersion.length) {
+                        sPreviousNumber = $(allVersion[i+1]).html();
+                        break;
+                    }
+                }
+                var aPath = window.location.pathname.split('/');
+                var repoPath = [aPath[0], aPath[1], aPath[2]];
+                var sUrlChangelog = repoPath.join('/')+'/compare/'+sPreviousNumber+'...'+sReleaseNumber;
+                var sRelease = "# Release " + sReleaseNumber ;
+                $('#release_name').val('['+aPath[2]+'] Release ' +sReleaseNumber);
+                sRelease += "\n\n**News Features :**\n- ... ";
+                sRelease += "\n\n**Fix :**\n- ... ";
+                sRelease += "\n\n**Improvement :**\n- ... ";
+                sRelease += "\n\n [Changelog](https://github.com"+sUrlChangelog+") ";
+                $('#release_body').val(sRelease);
+            }
+
+        }
         $('#release_body').on('blur', function(e) {
             var text = $(this).val();
             var aContent = text.split(/(^|[^\[])(#[0-9\d-]+)/);
