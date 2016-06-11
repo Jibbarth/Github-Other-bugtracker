@@ -4,7 +4,9 @@ import com.barth.gob.ElementId;
 import com.barth.gob.Method;
 import com.barth.gob.response.BugtrackerResponse;
 import js.Browser;
+import js.html.Element;
 import js.html.HTMLCollection;
+import js.html.TextareaElement;
 import js.Lib;
 
 class Main {
@@ -27,6 +29,11 @@ class Main {
             if (aCommit.length > 0) {
                 parseCommits(aCommit);
             }
+
+            var release:TextareaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
+            if(release != null) {
+                prepareRelease(release);
+            }
         }
     }
 
@@ -41,5 +48,14 @@ class Main {
             var content:String = commits[i].innerText;
             commits[i].innerHTML = regCommitNumber.replace(content, '<a href="'+_bugTrackerIssueUrl+'$1" class="issue-link js-issue-link" data-url="'+_bugTrackerIssueUrl+'$1" target="_blank">#$1</a>');
         }
+    }
+
+    private function prepareRelease(releaseField:Element):Void {
+        if(releaseField.value.length == 0) {
+            // TODO
+            // This release wasn't exist, we preset ALL
+        }
+        // TODO
+        // Add event listener on blur release field to replace with bugtracker issue url
     }
 }
