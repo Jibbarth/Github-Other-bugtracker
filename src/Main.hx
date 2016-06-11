@@ -7,6 +7,7 @@ import js.Browser;
 import js.html.AnchorElement;
 import js.html.Element;
 import js.html.HTMLCollection;
+import js.html.InputElement;
 import js.html.TextAreaElement;
 import js.Lib;
 
@@ -59,8 +60,30 @@ class Main {
 
     private function prepareRelease(releaseField:TextAreaElement):Void {
         if(releaseField.value.length == 0) {
-            // TODO
             // This release wasn't exist, we preset ALL
+            var releaseNumber:InputElement = cast Browser.document.getElementById(ElementId.RELEASE_TAG_NAME);
+            var allVersion:HTMLCollection = cast Browser.document.getElementById(ElementId.TAG_LIST).getElementsByTagName('option');
+            var sPreviousNumber:String = "#TO_REPLACE#";
+            for (i in 0 ... allVersion.length) {
+                if(allVersion[i].innerText == releaseNumber.value && (i+1) < allVersion.length) {
+                    sPreviousNumber = allVersion[i+1].innerText;
+                    break;
+                }
+            }
+
+            var aPath = cast Browser.location.pathname.split('/');
+            var repoPath = [aPath[0], aPath[1], aPath[2]];
+            var urlChangelog:String = repoPath.join('/') + '/compare/' + sPreviousNumber + '...'+releaseNumber.value;
+
+            var releaseNameField:InputElement = cast Browser.document.getElementById(ElementId.RELEASE_NAME);
+            releaseNameField.value = "["+aPath[2]+"] Release " + releaseNumber.value;
+
+            var descRelease:String =  "# Release " + releaseNumber.value;
+            descRelease += "\n\n**News Features :**\n- ... ";
+            descRelease += "\n\n**Fix :**\n- ... ";
+            descRelease += "\n\n**Improvement :**\n- ... ";
+            descRelease += "\n\n[Changelog](https://github.com"+urlChangelog+") ";
+            releaseField.value = descRelease;
         }
         // TODO
         // Add event listener on blur release field to replace with bugtracker issue url
