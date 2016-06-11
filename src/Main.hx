@@ -22,25 +22,24 @@ class Main {
     private function init() {
         if(_bugTrackerIssueUrl == "" || _bugTrackerIssueUrl == null) {
             Runtime.sendMessage({'method': Method.GET_BUGTRACKER_URL}, getBugtrackerUrlHandler);
-        }
-
-        var aCommit:HTMLCollection = Browser.document.getElementsByClassName(ElementId.COMMIT_TITLE);
-        if (aCommit.length > 0) {
-            trace(aCommit.length + " commits founds");
-            parseCommits(aCommit);
         } else {
-            trace('no commit found');
+            var aCommit:HTMLCollection = Browser.document.getElementsByClassName(ElementId.COMMIT_TITLE);
+            if (aCommit.length > 0) {
+                parseCommits(aCommit);
+            }
         }
     }
 
     private function getBugtrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void {
-        trace(bugTrackerUrl.url);
         _bugTrackerIssueUrl = bugTrackerUrl.url;
+        init();
     }
 
     private function parseCommits(commits:HTMLCollection):Void {
+        var regCommitNumber = ~/#([1-9\d-]+)/g;
         for (i in 0 ... commits.length) {
-            var mythis = commits[i];
+            var content:String = commits[i].innerText;
+            commits[i].innerHTML = regCommitNumber.replace(content, '<a href="'+_bugTrackerIssueUrl+'$1" class="issue-link js-issue-link" data-url="'+_bugTrackerIssueUrl+'$1" target="_blank">#$1</a>');
         }
     }
 }
