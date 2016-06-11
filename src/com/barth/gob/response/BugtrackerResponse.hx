@@ -1,6 +1,5 @@
-package com.barh.gob.response;
+package com.barth.gob.response;
 
-typedef BugtrackerResponse = {
-
-
+class BugtrackerResponse {
+    public var url:String;
 }
