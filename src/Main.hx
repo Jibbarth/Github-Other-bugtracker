@@ -85,7 +85,15 @@ class Main {
             descRelease += "\n\n[Changelog](https://github.com"+urlChangelog+") ";
             releaseField.value = descRelease;
         }
-        // TODO
+
         // Add event listener on blur release field to replace with bugtracker issue url
+        releaseField.addEventListener('blur', leaveReleaseDescHandler);
+    }
+
+    private function leaveReleaseDescHandler():Void{
+        var release:TextAreaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
+        var content = release.value;
+        var regCommitNumber = ~/(^|[^\[])#([0-9\d-]+)/g;
+        release.value = regCommitNumber.replace(content, '$1[#$2]('+_bugTrackerIssueUrl+'$2)');
     }
 }
