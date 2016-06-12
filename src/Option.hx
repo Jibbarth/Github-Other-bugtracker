@@ -5,12 +5,12 @@ import com.barth.gob.ElementId;
 import com.barth.gob.Method;
 import com.barth.gob.response.BugtrackerResponse;
 import js.Browser;
-import js.html.AnchorElement;
+import js.html.ButtonElement;
 import js.html.InputElement;
 
 class Option {
     private var _bugTrackerIssueUrl:String;
-    private var _buttonSaveField:AnchorElement;
+    private var _buttonSaveField:ButtonElement;
     private var _inputUrlField:InputElement;
 
     static function main():Void{
