@@ -8,6 +8,7 @@ class ElementId {
     public static inline var TAG_LIST = 'git-tags';
     public static inline var RELEASE_NAME = 'release_name';
     public static inline var BUGTRACKER_URL_KEY = 'bugtracker_issue_url';
-
+    public static inline var OPTION_SAVE_BUTTON = "saveBtn";
+    public static inline var OPTION_URL_INPUT = "bugtracker_issue_url";
 
 }

@@ -17,3 +17,12 @@
 -lib chrome-extension
 
 -js bin/background.js
+
+--next
+-main Option
+
+-cp src
+-lib jQueryExtern
+-lib chrome-extension
+
+-js bin/option.js
