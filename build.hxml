@@ -8,3 +8,12 @@
 -lib chrome-extension
 
 -js bin/main.js
+
+--next
+-main Background
+
+-cp src
+-lib jQueryExtern
+-lib chrome-extension
+
+-js bin/background.js
