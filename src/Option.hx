@@ -7,6 +7,7 @@ import com.barth.gob.response.BugtrackerResponse;
 import js.Browser;
 import js.html.ButtonElement;
 import js.html.InputElement;
+import jQuery.JQuery;
 
 class Option {
     private var _bugTrackerIssueUrl:String;
@@ -42,7 +43,10 @@ class Option {
 
     private function saveInBackgroundHandler(response:Dynamic):Void{
         if(response.success) {
-            trace("success");
+            new JQuery('#'+ElementId.OPTION_SAVE_BUTTON).find('i').hide().removeClass('hidden').fadeIn();
+            haxe.Timer.delay(function() {
+                new JQuery('#'+ElementId.OPTION_SAVE_BUTTON).find('i').fadeOut();
+            }, 1500);
         }
     }
 }
