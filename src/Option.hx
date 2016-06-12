@@ -25,14 +25,15 @@ class Option {
         _buttonSaveField = cast Browser.document.getElementById(ElementId.OPTION_SAVE_BUTTON);
         _inputUrlField = cast Browser.document.getElementById(ElementId.OPTION_URL_INPUT);
         _buttonSaveField.addEventListener('click', saveUrlHandler);
-        if(_bugTrackerIssueUrl == null){
+        if (_bugTrackerIssueUrl == null){
             Runtime.sendMessage({method:Method.GET_BUGTRACKER_URL}, getBugTrackerUrlHandler);
         }
     }
 
     private function getBugTrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void{
         _inputUrlField.value = bugTrackerUrl.url;
-    }
+        _bugTrackerIssueUrl = bugTrackerUrl.url;
+        }
 
     private function saveUrlHandler():Void{
         Browser.getLocalStorage().setItem(ElementId.BUGTRACKER_URL_KEY, _inputUrlField.value);
@@ -40,7 +41,6 @@ class Option {
     }
 
     private function saveInBackgroundHandler(response:Dynamic):Void{
-        trace('saveInBackgroundHandler');
         if(response.success) {
             trace("success");
         }
