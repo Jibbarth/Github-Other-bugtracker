@@ -23,6 +23,9 @@ class Option {
     }
 
     private function init():Void{
+        Runtime.sendMessage({method:Method.SET_OPTION_PAGE_VIEW});
+
+
         _buttonSaveField = cast Browser.document.getElementById(ElementId.OPTION_SAVE_BUTTON);
         _inputUrlField = cast Browser.document.getElementById(ElementId.OPTION_URL_INPUT);
         _buttonSaveField.addEventListener('click', saveUrlHandler);
@@ -34,7 +37,7 @@ class Option {
     private function getBugTrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void{
         _inputUrlField.value = bugTrackerUrl.url;
         _bugTrackerIssueUrl = bugTrackerUrl.url;
-        }
+    }
 
     private function saveUrlHandler():Void{
         Browser.getLocalStorage().setItem(ElementId.BUGTRACKER_URL_KEY, _inputUrlField.value);
