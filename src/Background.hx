@@ -14,7 +14,8 @@ class Background {
 
     public function new():Void{
         if(Browser.getLocalStorage().getItem(ElementId.OPTION_PAGE_VIEW_KEY) == null ||
-            Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == null ) {
+            Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == null ||
+            Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == "" ) {
             Runtime.openOptionsPage();
         }
         RuntimeResponse.onMessage.addListener(messageListenerHandler);
