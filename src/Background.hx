@@ -16,6 +16,11 @@ class Background {
     }
 
     public function new():Void{
+        // Preset use feature by true
+        if(Browser.getLocalStorage().getItem(ElementId.USE_RELEASE_KEY) == null) {
+            Browser.getLocalStorage().setItem(ElementId.USE_RELEASE_KEY, "true");
+        }
+
         if(Browser.getLocalStorage().getItem(ElementId.OPTION_PAGE_VIEW_KEY) == null ||
             Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == null ||
             Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == ""  ||
