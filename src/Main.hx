@@ -1,5 +1,6 @@
 package ;
 import chrome.Runtime;
+import chrome.Tabs;
 import com.barth.gob.ElementId;
 import com.barth.gob.Method;
 import com.barth.gob.response.BugtrackerResponse;
@@ -10,38 +11,56 @@ import js.html.HTMLCollection;
 import js.html.InputElement;
 import js.html.TextAreaElement;
 import js.Lib;
+import haxe.Json;
 
 class Main {
     private var _bugTrackerIssueUrl:String;
+    private var _useReleaseFeature:Bool;
+    private var _releaseExist:Bool;
 
     static function main():Void{
         new Main();
     }
 
     public function new() {
+        updateSettings();
+        Runtime.onMessage.addListener(messageListenerHandler);
         init();
         Browser.document.addEventListener(ElementId.GITHUB_CHANGE_PAGE_EVENT, init);
+        //Browser.document.addEventListener('focus',init);
     }
 
     private function init() {
-        if(_bugTrackerIssueUrl == "" || _bugTrackerIssueUrl == null) {
+        if(_useReleaseFeature == null) {
+            Runtime.sendMessage({'method': Method.GET_USE_RELEASE}, getUseReleaseHandler);
+        }
+
+        if(_bugTrackerIssueUrl == null) {
             Runtime.sendMessage({'method': Method.GET_BUGTRACKER_URL}, getBugtrackerUrlHandler);
         } else {
             var aCommit:HTMLCollection = Browser.document.getElementsByClassName(ElementId.COMMIT_TITLE);
             if (aCommit.length > 0) {
                 parseCommits(aCommit);
             }
-
-            var release:TextAreaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
-            if(release != null) {
-                prepareRelease(release);
+        }
+        var release:TextAreaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
+        if(release != null) {
+            if(_releaseExist == null) {
+                _releaseExist = false;
+                if(release.value.length > 0) {
+                    _releaseExist = true;
+                }
             }
+            prepareRelease(release);
         }
     }
 
     private function getBugtrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void {
         _bugTrackerIssueUrl = bugTrackerUrl.url;
         init();
+    }
+    private function getUseReleaseHandler(response:Dynamic):Void {
+        _useReleaseFeature = Json.parse(response.checked);
     }
 
     private function parseCommits(commits:HTMLCollection):Void {
@@ -59,9 +78,12 @@ class Main {
     }
 
     private function prepareRelease(releaseField:TextAreaElement):Void {
-        if(releaseField.value.length == 0) {
+        var releaseNumber:InputElement = cast Browser.document.getElementById(ElementId.RELEASE_TAG_NAME);
+        releaseNumber.addEventListener('change', function(){
+            prepareRelease(releaseField);
+        });
+        if(_releaseExist == false && _useReleaseFeature && releaseNumber.value != "") {
             // This release wasn't exist, we preset ALL
-            var releaseNumber:InputElement = cast Browser.document.getElementById(ElementId.RELEASE_TAG_NAME);
             var allVersion:HTMLCollection = cast Browser.document.getElementById(ElementId.TAG_LIST).getElementsByTagName('option');
             var sPreviousNumber:String = "#TO_REPLACE#";
             for (i in 0 ... allVersion.length) {
@@ -87,7 +109,9 @@ class Main {
         }
 
         // Add event listener on blur release field to replace with bugtracker issue url
-        releaseField.addEventListener('blur', leaveReleaseDescHandler);
+        if(_bugTrackerIssueUrl != "") {
+            releaseField.addEventListener('blur', leaveReleaseDescHandler);
+        }
     }
 
     private function leaveReleaseDescHandler():Void{
@@ -95,5 +119,20 @@ class Main {
         var content = release.value;
         var regCommitNumber = ~/(^|[^\[])#([0-9\d-]+)/g;
         release.value = regCommitNumber.replace(content, '$1[#$2]('+_bugTrackerIssueUrl+'$2)');
+    }
+
+    private function updateSettings():Void{
+        Runtime.sendMessage({'method': Method.GET_USE_RELEASE}, getUseReleaseHandler);
+        Runtime.sendMessage({'method': Method.GET_BUGTRACKER_URL}, getBugtrackerUrlHandler);
+    }
+
+    private function messageListenerHandler(?request:Dynamic, sender:MessageSender, ?sendResponse:Void->Void):Void{
+        switch(request.method) {
+            case Method.OPTION_CHANGED:
+                updateSettings();
+                sendResponse();
+            default:
+                trace('Unknow method ' + request.method);
+        }
     }
 }
