@@ -10,7 +10,7 @@ class ElementId {
     public static inline var BUGTRACKER_URL_KEY = 'bugtracker_issue_url';
     public static inline var USE_RELEASE_KEY = 'use_release';
 
-    public static inline var OPTION_PAGE_VIEW_KEY = 'gobused_once';
+    public static inline var OPTION_PAGE_VIEW_KEY = 'gobused_once-v0.4.1';
     public static inline var OPTION_SAVE_BUTTON = "saveBtn";
     public static inline var OPTION_URL_INPUT = "bugtracker_issue_url";
     public static inline var OPTION_USE_RELEASE_CB = "use_release";
