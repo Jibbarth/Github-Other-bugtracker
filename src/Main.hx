@@ -101,7 +101,7 @@ class Main {
             releaseNameField.value = "["+aPath[2]+"] Release " + releaseNumber.value;
 
             var descRelease:String =  "# Release " + releaseNumber.value;
-            descRelease += "\n\n**News Features :**\n- ... ";
+            descRelease += "\n\n**New Features :**\n- ... ";
             descRelease += "\n\n**Fix :**\n- ... ";
             descRelease += "\n\n**Improvement :**\n- ... ";
             descRelease += "\n\n[Changelog](https://github.com"+urlChangelog+") ";
