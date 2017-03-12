@@ -1,6 +1,6 @@
 {
   "name" :"Github Other Bugtracker",
-  "version" :"0.4.2",
+  "version" :"0.5.0",
   "description" :"This extension enable custom Bugtracker use in Github",
   "homepage_url": "http://jibébarth.fr",
   "icons": { "16": "icon16.png",
@@ -15,7 +15,8 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "storage"
+    "storage",
+    "tts"
   ],
   "options_page": "option.html",
   "background": {

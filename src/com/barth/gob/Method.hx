@@ -7,4 +7,5 @@ class Method {
     public static inline var SET_USE_RELEASE:String = 'setUseRelease';
     public static inline var GET_USE_RELEASE:String = 'getUseRelease';
     public static inline var OPTION_CHANGED:String = 'optionChange';
+    public static inline var SPEAK:String = 'speak';
 }
