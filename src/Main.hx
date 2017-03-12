@@ -3,6 +3,7 @@ import chrome.Runtime;
 import chrome.Tabs;
 import com.barth.gob.ElementId;
 import com.barth.gob.Method;
+import com.barth.gob.Message;
 import com.barth.gob.response.BugtrackerResponse;
 import js.Browser;
 import js.html.AnchorElement;
@@ -56,6 +57,7 @@ class Main {
 
         var pullRequest:TextAreaElement = cast Browser.document.getElementById(ElementId.PULL_REQUEST_BODY);
         if(pullRequest != null) {
+            Runtime.sendMessage({'method': Method.SPEAK, 'message': Message.NEW_PULL_REQUEST});
             // Add event listener on blur pr field to replace with bugtracker issue url
             if(_bugTrackerIssueUrl != "") {
                 pullRequest.addEventListener('blur', leavePRDescHandler);
@@ -88,6 +90,7 @@ class Main {
     }
 
     private function prepareRelease(releaseField:TextAreaElement):Void {
+        Runtime.sendMessage({'method': Method.SPEAK, 'message': Message.NEW_RELEASE});
         var releaseNumber:InputElement = cast Browser.document.getElementById(ElementId.RELEASE_TAG_NAME);
         releaseNumber.addEventListener('change', function(){
             prepareRelease(releaseField);

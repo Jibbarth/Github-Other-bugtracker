@@ -3,6 +3,7 @@ package ;
 import chrome.Runtime;
 import chrome.Tabs;
 import chrome.Windows;
+import chrome.TTS.Tts;
 import com.barth.gob.ElementId;
 import com.barth.gob.extend.RuntimeResponse;
 import com.barth.gob.Method;
@@ -11,6 +12,8 @@ import js.Browser;
 class Background {
 
     private var _tabId:Array<Int>;
+
+    private var _languageOption:Dynamic;
     static function main():Void{
         new Background();
     }
@@ -28,6 +31,12 @@ class Background {
             Runtime.openOptionsPage();
         }
         RuntimeResponse.onMessage.addListener(messageListenerHandler);
+        _languageOption = {
+          'lang': 'en-US',
+          'rate': 1,
+          'pitch': 1,
+        };
+
     }
 
     private function messageListenerHandler(?request:Dynamic, sender:MessageSender, ?sendResponse:Dynamic->Void):Void{
@@ -49,6 +58,9 @@ class Background {
                 Tabs.query({windowType:WindowType.normal, active:true},function(tab){
                     Tabs.sendMessage(tab[0].id, {method:Method.OPTION_CHANGED}, function(Response:Dynamic){});
                 });
+
+            case Method.SPEAK:
+                Tts.speak(request.message, _languageOption);
             default:
                 trace('unknow message :'+ request.method);
         }

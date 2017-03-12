@@ -15,7 +15,8 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "storage"
+    "storage",
+    "tts"
   ],
   "options_page": "option.html",
   "background": {
