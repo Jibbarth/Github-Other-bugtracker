@@ -53,6 +53,16 @@ class Main {
             }
             prepareRelease(release);
         }
+
+        var pullRequest:TextAreaElement = cast Browser.document.getElementById(ElementId.PULL_REQUEST_BODY);
+        if(pullRequest != null) {
+            // Add event listener on blur pr field to replace with bugtracker issue url
+            if(_bugTrackerIssueUrl != "") {
+                pullRequest.addEventListener('blur', leavePRDescHandler);
+            }
+        }
+
+        createCommentFormHandler();
     }
 
     private function getBugtrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void {
@@ -116,9 +126,30 @@ class Main {
 
     private function leaveReleaseDescHandler():Void{
         var release:TextAreaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
-        var content = release.value;
+        release.value = getContentWithCommitLink(release.value);
+    }
+
+    private function leavePRDescHandler():Void{
+        var pr:TextAreaElement = cast Browser.document.getElementById(ElementId.PULL_REQUEST_BODY);
+        pr.value = getContentWithCommitLink(pr.value);
+    }
+
+    private function createCommentFormHandler():Void {
+        Browser.document.addEventListener('click', function(event) {
+            var el:Element = cast event.target || event.srcElement;
+            if(el.className.indexOf(ElementId.COMMENT_FORM) >= 0) {
+                el.addEventListener('blur', leaveCommentFormDescHandler);
+            }
+        });
+    }
+    private function leaveCommentFormDescHandler(event:Dynamic):Void{
+        var elem:TextAreaElement = cast (event.target || event.srcElement);
+        elem.value = getContentWithCommitLink(elem.value);
+    }
+
+    private function getContentWithCommitLink(content):String{
         var regCommitNumber = ~/(^|[^\[])#([0-9\d-]+)/g;
-        release.value = regCommitNumber.replace(content, '$1[#$2]('+_bugTrackerIssueUrl+'$2)');
+        return regCommitNumber.replace(content, '$1[#$2]('+_bugTrackerIssueUrl+'$2)');
     }
 
     private function updateSettings():Void{
