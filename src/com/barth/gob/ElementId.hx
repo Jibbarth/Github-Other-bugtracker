@@ -5,6 +5,7 @@ class ElementId {
     public static inline var RELEASE_PAGE:String = 'release_body';
     public static inline var PULL_REQUEST_BODY:String = 'pull_request_body';
     public static inline var COMMENT_FORM:String = 'comment-form-textarea';
+    public static inline var ISSUE_LINK_CLASS:String = 'issue-link';
 
     public static inline var GITHUB_CHANGE_PAGE_EVENT:String = 'pjax:end';
     public static inline var RELEASE_TAG_NAME = 'release_tag_name';

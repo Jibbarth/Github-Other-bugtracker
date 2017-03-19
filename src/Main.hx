@@ -13,6 +13,7 @@ import js.html.InputElement;
 import js.html.TextAreaElement;
 import js.Lib;
 import haxe.Json;
+import StringTools;
 
 class Main {
     private var _bugTrackerIssueUrl:String;
@@ -78,12 +79,22 @@ class Main {
     private function parseCommits(commits:HTMLCollection):Void {
         var regCommitNumber = ~/#([1-9\d-]+)/g;
         for (i in 0 ... commits.length) {
-            var content:String = commits[i].innerText;
-            var originalAnchor:AnchorElement = cast commits[i].getElementsByTagName('a')[0];
-            if (originalAnchor != null) {
-                originalAnchor.innerHTML = regCommitNumber.replace(content, '</a><a href="'+_bugTrackerIssueUrl+'$1" class="issue-link js-issue-link" data-url="'+_bugTrackerIssueUrl+'$1" target="_blank">#$1</a><a href="'+originalAnchor.href+'">');
-                commits[i].innerHTML = originalAnchor.outerHTML;
+            var anchorElements:HTMLCollection = cast commits[i].getElementsByTagName('a'); 
+            var aLength:Int = anchorElements.length;
+
+            if (aLength >= 1) {
+                for (j in 0 ... aLength) {
+                    var originalAnchor:AnchorElement = cast anchorElements[j];
+                    if (originalAnchor.className.indexOf(ElementId.ISSUE_LINK_CLASS) < 0){
+                        var content = originalAnchor.innerText;
+                        originalAnchor.title = "";
+                        var output:String = regCommitNumber.replace(content, '</a><a href="'+_bugTrackerIssueUrl+'$1" class="issue-link js-issue-link" data-url="'+_bugTrackerIssueUrl+'$1" target="_blank">#$1</a><a href="'+originalAnchor.href+'">');
+                        originalAnchor.outerHTML = StringTools.replace(originalAnchor.outerHTML, content, output);
+                        originalAnchor.title = content;
+                    }
+                } 
             } else {
+                var content:String = commits[i].innerText;
                 commits[i].innerHTML = regCommitNumber.replace(content, '<a href="'+_bugTrackerIssueUrl+'$1" class="issue-link js-issue-link" data-url="'+_bugTrackerIssueUrl+'$1" target="_blank">#$1</a>');
             }
         }
