@@ -1,4 +1,4 @@
-# GithubBugtracker
+# GithubBugtracker [![Chrome Web Store](https://img.shields.io/chrome-web-store/d/hnkhefhbcmbllffghlcjiofmpfdfofle.svg?style=flat-square)]()
 
 It's a chrome extension that allow you to use github with other bugtracker
 
