@@ -17,6 +17,7 @@ class Comment
 {
     private var regCommitNumber:EReg = ~/(^|[^\[])#([0-9\d-]+)/g;
     private var _bugTrackerIssueUrl:String;
+    private var _defaultRewriteEnabled:Bool = false;
 
     public function new()
     {
@@ -29,14 +30,11 @@ class Comment
         var textAreaCollection:HTMLCollection = cast Browser.document.getElementsByTagName('textarea');
         for (i in 0 ...textAreaCollection.length) {
             var txtArea:TextAreaElement = cast textAreaCollection[i];
-            setRewriteFeature(txtArea, true);
+            setRewriteFeature(txtArea, _defaultRewriteEnabled);
             addRewriteLink(txtArea);
         }
-    }
 
-    public function setRewriteFeature(elem:TextAreaElement, enable:Bool):Void
-    {
-        elem.setAttribute(ElementId.TXTAREA_DATA_REWRITE, cast enable);
+        createCommentFormHandler();
     }
 
     public function replaceTextareaContentHandler(elem:TextAreaElement):Void
@@ -46,15 +44,35 @@ class Comment
         }
     }
 
-
     public function setBugTrackerUrl(url:String):Void
     {
         _bugTrackerIssueUrl = url;
     }
 
-    private function getContentWithCommitLink(content):String
+    public function getContentWithCommitLink(content):String
     {
         return regCommitNumber.replace(content, '$1[#$2]('+_bugTrackerIssueUrl+'$2)');
+    }
+
+    private function createCommentFormHandler():Void
+    {
+        Browser.document.addEventListener('click', function(event) {
+            var el:Element = cast event.target || event.srcElement;
+            if (el.className.indexOf(ElementId.COMMENT_FORM) >= 0) {
+                el.addEventListener('blur', leaveCommentFormDescHandler);
+            }
+        });
+    }
+
+    private function setRewriteFeature(elem:TextAreaElement, enable:Bool):Void
+    {
+        elem.setAttribute(ElementId.TXTAREA_DATA_REWRITE, cast enable);
+    }
+
+    private function leaveCommentFormDescHandler(event:Dynamic):Void
+    {
+        var elem:TextAreaElement = cast (event.target || event.srcElement);
+        replaceTextareaContentHandler(elem);
     }
 
     private function addRewriteLink(elem:TextAreaElement)
@@ -71,8 +89,8 @@ class Comment
 
             var cb:InputElement = cast Browser.document.createElement('input');
             cb.type = "checkbox";
-            cb.checked = true;
-            cb.defaultChecked = true;
+            cb.checked = _defaultRewriteEnabled;
+            cb.defaultChecked = _defaultRewriteEnabled;
             cb.id = uuid;
             cb.addEventListener('change', activeRewriteHandler);
 
@@ -115,5 +133,9 @@ class Comment
         var txtArea:TextAreaElement = cast Browser.document.querySelector('textarea.gob_' +  cb.id);
 
         setRewriteFeature(txtArea, cb.checked);
+
+        if (cb.checked) {
+            replaceTextareaContentHandler(txtArea);
+        }
     }
 }

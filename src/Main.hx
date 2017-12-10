@@ -63,13 +63,7 @@ class Main
         var pullRequest:TextAreaElement = cast Browser.document.getElementById(ElementId.PULL_REQUEST_BODY);
         if (pullRequest != null) {
             Runtime.sendMessage({'method': Method.SPEAK, 'message': Message.NEW_PULL_REQUEST});
-            // Add event listener on blur pr field to replace with bugtracker issue url
-            if (_bugTrackerIssueUrl != "") {
-                pullRequest.addEventListener('blur', leavePRDescHandler);
-            }
         }
-
-        createCommentFormHandler();
     }
 
     private function getBugtrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void {
@@ -126,33 +120,7 @@ class Main
     private function leaveReleaseDescHandler():Void{
         var release:TextAreaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
 
-        _commentUtil.replaceTextareaContentHandler(release);
-    }
-
-    private function leavePRDescHandler():Void{
-        var pr:TextAreaElement = cast Browser.document.getElementById(ElementId.PULL_REQUEST_BODY);
-
-        _commentUtil.replaceTextareaContentHandler(pr);
-    }
-
-    private function createCommentFormHandler():Void {
-        Browser.document.addEventListener('click', function(event) {
-            var el:Element = cast event.target || event.srcElement;
-            if (el.className.indexOf(ElementId.COMMENT_FORM) >= 0) {
-                el.addEventListener('blur', leaveCommentFormDescHandler);
-            }
-        });
-    }
-
-    private function leaveCommentFormDescHandler(event:Dynamic):Void{
-        var elem:TextAreaElement = cast (event.target || event.srcElement);
-
-        _commentUtil.replaceTextareaContentHandler(elem);
-    }
-
-    private function getContentWithCommitLink(content):String{
-        var regCommitNumber = ~/(^|[^\[])#([0-9\d-]+)/g;
-        return regCommitNumber.replace(content, '$1[#$2]('+_bugTrackerIssueUrl+'$2)');
+        release.value = _commentUtil.getContentWithCommitLink(release.value);
     }
 
     private function updateSettings():Void{
