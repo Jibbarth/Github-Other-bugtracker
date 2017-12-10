@@ -1,4 +1,4 @@
-package ;
+package;
 
 import chrome.Runtime;
 import chrome.Tabs;
@@ -9,27 +9,28 @@ import com.barth.gob.extend.RuntimeResponse;
 import com.barth.gob.Method;
 import js.Browser;
 
-class Background {
-
+class Background
+{
     private var _tabId:Array<Int>;
-
     private var _languageOption:Dynamic;
+
     static function main():Void{
         new Background();
     }
 
     public function new():Void{
         // Preset use feature by true
-        if(Browser.getLocalStorage().getItem(ElementId.USE_RELEASE_KEY) == null) {
+        if (Browser.getLocalStorage().getItem(ElementId.USE_RELEASE_KEY) == null) {
             Browser.getLocalStorage().setItem(ElementId.USE_RELEASE_KEY, "true");
         }
 
-        if(Browser.getLocalStorage().getItem(ElementId.OPTION_PAGE_VIEW_KEY) == null ||
+        if (Browser.getLocalStorage().getItem(ElementId.OPTION_PAGE_VIEW_KEY) == null ||
             Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == null ||
             Browser.getLocalStorage().getItem(ElementId.BUGTRACKER_URL_KEY) == ""  ||
             Browser.getLocalStorage().getItem(ElementId.USE_RELEASE_KEY) == null) {
             Runtime.openOptionsPage();
         }
+
         RuntimeResponse.onMessage.addListener(messageListenerHandler);
         _languageOption = {
           'lang': 'en-US',

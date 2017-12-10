@@ -1,6 +1,7 @@
 package com.barth.gob;
 
-class ElementId {
+class ElementId
+{
     public static inline var COMMIT_TITLE:String = 'commit-title';
     public static inline var RELEASE_PAGE:String = 'release_body';
     public static inline var PULL_REQUEST_BODY:String = 'pull_request_body';

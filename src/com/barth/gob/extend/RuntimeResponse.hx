@@ -6,6 +6,7 @@ import chrome.Runtime;
 
 @:require(chrome)
 @:native("chrome.runtime")
-extern class RuntimeResponse extends Runtime{
+extern class RuntimeResponse extends Runtime
+{
     static var onMessage(default,never) : Event<?Dynamic->MessageSender->(?Dynamic->Void)->Void>;
 }
