@@ -8,7 +8,7 @@ import js.Browser;
 import js.html.ButtonElement;
 import js.html.InputElement;
 import haxe.Json;
-import jQuery.JQuery;
+import js.jquery.JQuery;
 
 class Option
 {

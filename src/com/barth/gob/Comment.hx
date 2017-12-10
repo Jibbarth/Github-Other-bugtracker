@@ -6,7 +6,7 @@ import js.html.InputElement;
 import js.html.LabelElement;
 import js.html.Element;
 import js.Browser;
-import jQuery.JQuery;
+import js.jquery.JQuery;
 import com.barth.gob.tools.Uuid;
 import haxe.Json;
 
