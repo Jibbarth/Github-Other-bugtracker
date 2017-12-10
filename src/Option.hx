@@ -8,9 +8,10 @@ import js.Browser;
 import js.html.ButtonElement;
 import js.html.InputElement;
 import haxe.Json;
-import jQuery.JQuery;
+import js.jquery.JQuery;
 
-class Option {
+class Option
+{
     private var _bugTrackerIssueUrl:String;
     private var _buttonSaveField:ButtonElement;
     private var _inputUrlField:InputElement;
@@ -61,7 +62,7 @@ class Option {
     }
 
     private function saveInBackgroundHandler(response:Dynamic):Void{
-        if(response.success) {
+        if (response.success) {
             new JQuery('#'+ElementId.OPTION_SAVE_BUTTON).find('i').hide().removeClass('hidden').fadeIn();
             haxe.Timer.delay(function() {
                 new JQuery('#'+ElementId.OPTION_SAVE_BUTTON).find('i').fadeOut();

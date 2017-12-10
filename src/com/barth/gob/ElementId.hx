@@ -1,6 +1,7 @@
 package com.barth.gob;
 
-class ElementId {
+class ElementId
+{
     public static inline var COMMIT_TITLE:String = 'commit-title';
     public static inline var RELEASE_PAGE:String = 'release_body';
     public static inline var PULL_REQUEST_BODY:String = 'pull_request_body';
@@ -18,5 +19,8 @@ class ElementId {
     public static inline var OPTION_SAVE_BUTTON = "saveBtn";
     public static inline var OPTION_URL_INPUT = "bugtracker_issue_url";
     public static inline var OPTION_USE_RELEASE_CB = "use_release";
+
+    public static inline var COMMENT_FORM_HEAD = "comment-form-head";
+    public static inline var TXTAREA_DATA_REWRITE = "data-rewrite";
 
 }
