@@ -20,4 +20,7 @@ class ElementId
     public static inline var OPTION_URL_INPUT = "bugtracker_issue_url";
     public static inline var OPTION_USE_RELEASE_CB = "use_release";
 
+    public static inline var COMMENT_FORM_HEAD = "comment-form-head";
+    public static inline var TXTAREA_DATA_REWRITE = "data-rewrite";
+
 }

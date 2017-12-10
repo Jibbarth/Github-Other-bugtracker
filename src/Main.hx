@@ -7,6 +7,7 @@ import com.barth.gob.Method;
 import com.barth.gob.Message;
 import com.barth.gob.response.BugtrackerResponse;
 import com.barth.gob.CommitList;
+import com.barth.gob.Comment;
 import js.Browser;
 import js.html.Element;
 import js.html.HTMLCollection;
@@ -20,6 +21,7 @@ class Main
     private var _useReleaseFeature:Bool;
     private var _releaseExist:Bool;
     private var _commitList:CommitList;
+    private var _commentUtil:Comment;
 
     static function main():Void{
         new Main();
@@ -28,6 +30,7 @@ class Main
     public function new() {
         updateSettings();
         _commitList = new CommitList();
+        _commentUtil = new Comment();
         Runtime.onMessage.addListener(messageListenerHandler);
         init();
         Browser.document.addEventListener(ElementId.GITHUB_CHANGE_PAGE_EVENT, init);
@@ -72,6 +75,7 @@ class Main
     private function getBugtrackerUrlHandler(bugTrackerUrl:BugtrackerResponse):Void {
         _bugTrackerIssueUrl = bugTrackerUrl.url;
         _commitList.setBugTrackerUrl(_bugTrackerIssueUrl);
+        _commentUtil.setBugTrackerUrl(_bugTrackerIssueUrl);
         init();
     }
 
@@ -122,13 +126,13 @@ class Main
     private function leaveReleaseDescHandler():Void{
         var release:TextAreaElement = cast Browser.document.getElementById(ElementId.RELEASE_PAGE);
 
-        updateTextareaWithCommit(release);
+        _commentUtil.replaceTextareaContentHandler(release);
     }
 
     private function leavePRDescHandler():Void{
         var pr:TextAreaElement = cast Browser.document.getElementById(ElementId.PULL_REQUEST_BODY);
 
-        updateTextareaWithCommit(pr);
+        _commentUtil.replaceTextareaContentHandler(pr);
     }
 
     private function createCommentFormHandler():Void {
@@ -143,7 +147,7 @@ class Main
     private function leaveCommentFormDescHandler(event:Dynamic):Void{
         var elem:TextAreaElement = cast (event.target || event.srcElement);
 
-        updateTextareaWithCommit(elem);
+        _commentUtil.replaceTextareaContentHandler(elem);
     }
 
     private function getContentWithCommitLink(content):String{
@@ -166,7 +170,4 @@ class Main
         }
     }
 
-    private function updateTextareaWithCommit(elem:TextAreaElement):Void {
-        elem.value = getContentWithCommitLink(elem.value);
-    }
 }

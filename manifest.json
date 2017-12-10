@@ -28,7 +28,7 @@
     "content_scripts": [
         {
             "matches": [ "https://github.com/*"],
-            "js": [ "bin/main.js"]
+            "js": [ "script/jquery.min.js","bin/main.js"]
         }
     ],
     "manifest_version": 2
